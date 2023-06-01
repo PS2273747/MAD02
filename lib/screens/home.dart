@@ -1,111 +1,125 @@
 import 'package:flutter/material.dart';
+import 'package:lastfm_app/API/login_logic.dart';
 import 'package:lastfm_app/widgets/bottom_nav.dart';
-import 'package:lastfm_app/API/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final AuthService authService = AuthService();
-  bool _isLoggedIn = false;
+  final LoginLogic loginLogic = LoginLogic();
 
-  @override
-  void initState() {
-    super.initState();
-    authService.checkAuthStatus().then((isLoggedIn) {
-      setState(() {
-        _isLoggedIn = isLoggedIn;
-      });
-    });
-  }
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  void _handleLogin(String email, String password) async {
-    try {
-      await authService.handleLogin(context, email, password);
-      setState(() {
-        _isLoggedIn = true;
-      });
-    } catch (e) {
-      // Handle login error here
-      print('Login failed: $e');
+  Future<void> loginUser(BuildContext context) async {
+    final String email = emailController.text;
+    final String password = passwordController.text;
+
+    final bool loginResult = await loginLogic.loginUser(email, password);
+
+    if (loginResult) {
+      // Login successful
+      // Navigate to the homepage route
+      Navigator.pushNamed(context, '/homepage');
+    } else {
+      // Login failed
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login Failed'),
+            content: Text('Invalid email or password.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
-  void _handleRegister(String name, String email, String password) async {
-    try {
-      await authService.handleRegister(context, name, email, password);
-      setState(() {
-        _isLoggedIn = true;
-      });
-    } catch (e) {
-      // Handle registration error here
-      print('Registration failed: $e');
-    }
+  void showLoginDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Login'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                ),
+              ),
+              TextField(
+                controller: passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                ),
+                obscureText: true,
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                loginUser(context);
+              },
+              child: Text('Login'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Last.fm App'),
+        title: Text('Home'),
       ),
       body: Center(
-        child: _isLoggedIn
-            ? const Text('Welcome to Last.fm App!')
-            : Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AboutDialog(
-                      applicationName: 'Last.fm App',
-                      applicationVersion: '0.0.2',
-                      children: const [
-                        Text('This is a music app.'),
-                        Text('Developed by Kinga Wullems'),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.music_note,
-                    size: 100,
-                    color: Colors.blue,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Music App',
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ],
+            Text(
+              'Song App',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _handleLogin('example@example.com', 'password123');
-              },
-              child: const Text('Login'),
+            SizedBox(height: 16),
+            Icon(
+              Icons.music_note,
+              size: 120,
+              color: Colors.blue,
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                _handleRegister('John Doe', 'johndoe@example.com', 'password123');
+                showLoginDialog(context);
               },
-              child: const Text('Register'),
+              child: Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(200, 50),
+              ),
             ),
           ],
         ),
