@@ -37,7 +37,6 @@ class UserAPI {
 // ---------LOGIN----------
   static Future<void> login(BuildContext context, String email, String password) async {
     try {
-      print('test1');
       final url = baseUrl + 'login';
 
       final response = await http.post(
@@ -113,11 +112,12 @@ class UserAPI {
   }
 
 //---- REGISTER---
-
   static Future<void> register(BuildContext context, String name, String email, String password) async {
     try {
+      final url = baseUrl + 'register';
+
       final response = await http.post(
-        Uri.parse('$baseUrl/register'),
+        Uri.parse(url),
         body: {
           'name': name,
           'email': email,
@@ -125,7 +125,10 @@ class UserAPI {
         },
       );
 
-      if (response.statusCode == 200) {
+      print('Response Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 201) {
         // Registration successful, you can handle the success flow here
         showDialog(
           context: context,
@@ -183,11 +186,13 @@ class UserAPI {
       );
     }
   }
+
   //----- LOGOUT----
   static Future<void> logout(String token) async {
-    final url = baseUrl + 'logout';
+
 
     try {
+      final url = baseUrl + 'logout';
       // Make the API request to log out
       final response = await http.post(
         Uri.parse(url),
