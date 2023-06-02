@@ -8,6 +8,34 @@ import 'package:lastfm_app/screens/login_screen.dart';
 class UserAPI {
   static const String baseUrl = 'http://10.0.2.2:8000/api/';
 
+  //-----GET FRIENDS-----
+
+  static Future<List<String>> fetchFriends() async {
+    final url = Uri.parse(baseUrl + 'friends?email=${UserData.userEmail}');
+
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer ${UserData.authToken}',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final friendsList = List<String>.from(data['friends']);
+        return friendsList;
+      } else {
+        throw Exception('Failed to fetch friend list');
+      }
+    } catch (e) {
+      throw Exception('An error occurred: $e');
+    }
+  }
+
+
   //------GET USER---------
   static Future<Map<String, dynamic>> fetchUser() async {
     final url = Uri.parse(baseUrl + 'user?email=${UserData.userEmail}');

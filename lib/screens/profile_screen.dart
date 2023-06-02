@@ -11,6 +11,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String _name = '';
   String _email = '';
+  List<String> _friends = [];
 
   @override
   void initState() {
@@ -20,11 +21,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _fetchUserData() async {
     try {
-
       final userData = await UserAPI.fetchUser();
+      final friendsData = await UserAPI.fetchFriends();
+
       setState(() {
         _name = userData['name'];
         _email = userData['email'];
+        _friends = friendsData;
       });
     } catch (error) {
       _showErrorDialog('Error occurred while fetching user data.');
@@ -97,6 +100,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(fontSize: 24.0),
             ),
             SizedBox(height: 30.0),
+            Text(
+              'Friends:',
+              style: TextStyle(fontSize: 20.0),
+            ),
+            SizedBox(height: 10.0),
+            Column(
+              children: _friends.map((friend) => Text(friend)).toList(),
+            ),
+            SizedBox(height: 30.0),
             ElevatedButton(
               onPressed: _performLogout,
               child: Text('Logout'),
@@ -104,14 +116,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
-
-    bottomNavigationBar: BottomNav(
-    currentIndex: 0,
-    onItemTapped: (index) {
-    // No navigation logic here, handled in BottomNav widget
-    },
-    )
+      bottomNavigationBar: BottomNav(
+        currentIndex: 0,
+        onItemTapped: (index) {
+          // No navigation logic here, handled in BottomNav widget
+        },
+      ),
     );
   }
 }
-
