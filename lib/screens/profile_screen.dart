@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lastfm_app/api/user_requests.dart';
 import 'package:lastfm_app/api/user_data.dart';
 import 'package:lastfm_app/widgets/bottom_nav.dart';
+import 'package:lastfm_app/api/result.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _name = '';
   String _email = '';
   List<String> _friends = [];
+  List<String> _searchResults = [];
 
   @override
   void initState() {
@@ -61,6 +63,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         );
       },
+    );
+  }
+
+  Future<List<String>> _searchUsers(String query) async {
+    try {
+      final results = await UserAPI.fetchUsers(query);
+      return results;
+    } catch (error) {
+      _showErrorDialog('Error occurred while searching for users.');
+      return [];
+    }
+  }
+
+  void _navigateToResultPage(List<String> results) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultPage(userList: results),
+      ),
     );
   }
 
@@ -143,6 +164,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               ),
+            ),
+          ),
+          Container(
+            color: Colors.white,
+            padding: EdgeInsets.all(16.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search for users',
+                prefixIcon: Icon(Icons.search),
+              ),
+              onSubmitted: (value) {
+                _searchUsers(value).then((results) {
+                  setState(() {
+                    _searchResults = results;
+                  });
+
+                  _navigateToResultPage(_searchResults);
+                });
+              },
             ),
           ),
         ],

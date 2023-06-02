@@ -60,6 +60,34 @@ class UserAPI {
     }
   }
 
+  //---- GET USERS -----
+  static Future<List<String>> fetchUsers(String query) async {
+    final url = Uri.parse(baseUrl + 'users?query=$query');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer ${UserData.authToken}',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final userList = <String>[];
+        for (final item in data) {
+          final name = item['name'];
+          userList.add(name);
+        }
+        return userList;
+      } else {
+        throw Exception('Failed to fetch user information');
+      }
+    } catch (e) {
+      throw Exception('An error occurred: $e');
+    }
+  }
 
 
 // ---------LOGIN----------
