@@ -23,7 +23,7 @@ class BottomNav extends StatelessWidget {
         //routes can be found in main.dart
         switch (index) {
           case 0:
-            Navigator.pushReplacementNamed(context, '/');
+            Navigator.pushReplacementNamed(context, '/profile');
             break;
           case 1:
             Navigator.pushReplacementNamed(context, '/popular');
@@ -40,8 +40,8 @@ class BottomNav extends StatelessWidget {
       },
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.person_2),
+          label: 'Profile',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.whatshot),

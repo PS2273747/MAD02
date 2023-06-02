@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lastfm_app/screens/home.dart';
+import 'package:lastfm_app/screens/profile_screen.dart';
 import 'package:lastfm_app/screens/popular_songs_screen.dart';
 import 'package:lastfm_app/screens/search_screen.dart';
 import 'package:lastfm_app/screens/favorite_songs_screen.dart';
+import 'package:lastfm_app/screens/login_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,9 +17,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
-        '/': (context) => HomeScreen(),
+        '/login': (context) => LoginScreen(),
+        '/profile': (context) => ProfileScreen(),
         '/popular': (context) => PopularSongsScreen(),
         '/search': (context) => SearchScreen(),
         '/favorites': (context) => FavoritesScreen(),

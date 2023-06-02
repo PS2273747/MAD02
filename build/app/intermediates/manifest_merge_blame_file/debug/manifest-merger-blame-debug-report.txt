@@ -13,9 +13,9 @@
 13         to allow setting breakpoints, to provide hot reload, etc.
 14    -->
 15    <uses-permission android:name="android.permission.INTERNET" />
-15-->C:\Users\kinga\Documents\Summa_College\Leerjaar_2\MAD\MAD2\lastfm_app\android\app\src\debug\AndroidManifest.xml:7:5-66
-15-->C:\Users\kinga\Documents\Summa_College\Leerjaar_2\MAD\MAD2\lastfm_app\android\app\src\debug\AndroidManifest.xml:7:22-64
-16
+15-->C:\Users\kinga\Documents\Summa_College\Leerjaar_2\MAD\MAD2\lastfm_app\android\app\src\main\AndroidManifest.xml:3:5-67
+15-->C:\Users\kinga\Documents\Summa_College\Leerjaar_2\MAD\MAD2\lastfm_app\android\app\src\main\AndroidManifest.xml:3:22-64
+16    <!-- Added permission -->
 17    <application
 18        android:name="android.app.Application"
 19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
