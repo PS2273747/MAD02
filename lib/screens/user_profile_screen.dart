@@ -97,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('User Profile'),
         actions: [
           IconButton(
             icon: Icon(Icons.info_outline),

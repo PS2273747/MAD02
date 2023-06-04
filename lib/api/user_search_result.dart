@@ -20,7 +20,13 @@ class ResultPage extends StatelessWidget {
           final userEmail = userList[index]['email'] ?? '';
 
           return ListTile(
-            title: Text(name),
+            title: Text(
+              name,
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.blue,
+              ),
+            ),
             //subtitle: Text(userEmail), // Display the email in the subtitle for testing purposes
             onTap: () async {
               if (userEmail.isNotEmpty) {

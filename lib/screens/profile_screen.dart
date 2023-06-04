@@ -1,11 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:lastfm_app/api/user_requests.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   final String name;
   final String email;
   final bool isFriend;
 
   ProfilePage({required this.name, required this.email, required this.isFriend});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  List<String> friendList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isFriend) {
+      _fetchFriendList();
+    }
+  }
+
+  void _fetchFriendList() async {
+    try {
+      final friendsData = await UserAPI.fetchFriends();
+      setState(() {
+        friendList = friendsData;
+      });
+    } catch (error) {
+      _showErrorDialog('Error occurred while fetching friend list.');
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,26 +66,40 @@ class ProfilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Name: $name',
-              style: TextStyle(fontSize: 20.0),
+
+              'Name: ${widget.name}',
+                style: TextStyle(fontSize: 20.0, color: Colors.blue),
             ),
             SizedBox(height: 10.0),
-
-            if (isFriend)
+            if (widget.isFriend)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Email: $email',
-                    style: TextStyle(fontSize: 20.0),
+                    'Email: ${widget.email}',
+                    style: TextStyle(fontSize: 20.0, color: Colors.blue),
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 20.0,),
                   Text(
                     'Friends:',
-                    style: TextStyle(fontSize: 20.0),
+                    style: TextStyle(fontSize: 20.0, color: Colors.blue),
                   ),
                   SizedBox(height: 10.0),
-                  // TODO: Display friend list and song list
+                  Container(
+                    height: 200.0,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: friendList.map((friend) => Container(
+                          margin: EdgeInsets.only(bottom: 10.0),
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                            friend,
+                            style: TextStyle(fontSize: 18.0, color: Colors.blue),
+                          ),
+                        )).toList(),
+                      ),
+                    ),
+                  ),
                 ],
               )
             else
