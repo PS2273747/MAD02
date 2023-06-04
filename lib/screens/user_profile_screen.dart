@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lastfm_app/api/user_requests.dart';
-import 'package:lastfm_app/api/user_data.dart';
+import 'package:lastfm_app/classes/user_data.dart';
 import 'package:lastfm_app/widgets/bottom_nav.dart';
-import 'package:lastfm_app/api/user_search_result.dart';
-import 'package:lastfm_app/api/edit_profile.dart';
+import 'package:lastfm_app/screens/user_search_result_screen.dart';
+import 'package:lastfm_app/screens/edit_profile_screen.dart';
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'user_data.dart';
+import '../classes/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:lastfm_app/screens/user_profile_screen.dart';
 
