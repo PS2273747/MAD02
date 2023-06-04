@@ -1,4 +1,4 @@
-#Fri Jun 02 16:21:56 CEST 2023
+#Sat Jun 03 11:34:54 CEST 2023
 base.0=C\:\\Users\\kinga\\Documents\\Summa_College\\Leerjaar_2\\MAD\\MAD2\\lastfm_app\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

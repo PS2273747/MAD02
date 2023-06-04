@@ -2,11 +2,38 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'user_data.dart';
 import 'package:flutter/material.dart';
-import 'package:lastfm_app/screens/profile_screen.dart';
+import 'package:lastfm_app/screens/user_profile_screen.dart';
 import 'package:lastfm_app/screens/login_screen.dart';
 
 class UserAPI {
   static const String baseUrl = 'http://10.0.2.2:8000/api/';
+
+// ----  CHECK FRIENDSHIP STATUS-----
+  static Future<bool> checkFriendshipStatus(String email) async {
+    final url = Uri.parse(baseUrl + 'users/check-friendship-status');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer ${UserData.authToken}',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'email': email}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final isFriend = data['isFriend'] as bool;
+        return isFriend;
+      } else {
+        throw Exception('Failed to check friendship status');
+      }
+    } catch (e) {
+      throw Exception('An error occurred: $e');
+    }
+  }
+
 
   //-----GET FRIENDS-----
 
@@ -51,6 +78,7 @@ class UserAPI {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        data['email'] = UserData.userEmail; // Add the email to the response data
         return data;
       } else {
         throw Exception('Failed to fetch user information');
@@ -60,8 +88,9 @@ class UserAPI {
     }
   }
 
-  //---- GET USERS -----
-  static Future<List<String>> fetchUsers(String query) async {
+
+  //---- GET USERS (Search) -----
+  static Future<List<Map<String, dynamic>>> fetchUsers(String query) async {
     final url = Uri.parse(baseUrl + 'users?query=$query');
 
     try {
@@ -75,11 +104,18 @@ class UserAPI {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final userList = <String>[];
+        final List<Map<String, dynamic>> userList = [];
         for (final item in data) {
           final name = item['name'];
-          userList.add(name);
+          final email = item['email'];
+          userList.add({
+            'name': name,
+            'email': email,
+          });
         }
+
+        print('User List: $userList'); // Print the userList contents
+
         return userList;
       } else {
         throw Exception('Failed to fetch user information');
@@ -148,7 +184,7 @@ class UserAPI {
         );
       }
     } catch (e) {
-      print('An error occurred: $e'); // Add this print statement
+      print('An error occurred: $e');
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lastfm_app/screens/profile_screen.dart';
+import 'package:lastfm_app/screens/user_profile_screen.dart';
 import 'package:lastfm_app/screens/popular_songs_screen.dart';
 import 'package:lastfm_app/screens/search_screen.dart';
 import 'package:lastfm_app/screens/favorite_songs_screen.dart';
