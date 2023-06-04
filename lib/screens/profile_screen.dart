@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lastfm_app/api/user_requests.dart';
+import 'package:lastfm_app/api/friend_requests.dart';
+import 'package:lastfm_app/screens/user_profile_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   final String name;
@@ -54,6 +56,21 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Future<void> _addFriend() async {
+    try {
+      await FriendRequest.makeFriend(widget.email);
+
+      // Refresh the profile
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => (ProfileScreen())
+        )
+      );
+    } catch (error) {
+      _showErrorDialog('Failed to add friend: $error');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,9 +83,8 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-
               'Name: ${widget.name}',
-                style: TextStyle(fontSize: 20.0, color: Colors.blue),
+              style: TextStyle(fontSize: 20.0, color: Colors.blue),
             ),
             SizedBox(height: 10.0),
             if (widget.isFriend)
@@ -112,9 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 10.0),
                   ElevatedButton(
-                    onPressed: () {
-                      // TODO: Logic for adding user as friend
-                    },
+                    onPressed: _addFriend, // Call the _addFriend method
                     child: Text('Become Friends'),
                   ),
                 ],

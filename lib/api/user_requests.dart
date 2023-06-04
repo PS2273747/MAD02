@@ -114,7 +114,7 @@ class UserAPI {
           });
         }
 
-        print('User List: $userList'); // Print the userList contents
+        print('User List: $userList');
 
         return userList;
       } else {
