@@ -27,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _fetchFriendList() async {
     try {
-      final friendsData = await UserAPI.fetchFriends();
+      final friendsData = await UserAPI.fetchFriends(widget.email);
       setState(() {
         friendList = friendsData;
       });

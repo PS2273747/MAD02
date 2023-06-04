@@ -35,10 +35,38 @@ class UserAPI {
   }
 
 
-  //-----GET FRIENDS-----
+  //-----GET FRIENDS OF LOGGED IN USER -----
 
-  static Future<List<String>> fetchFriends() async {
-    final url = Uri.parse(baseUrl + 'friends?email=${UserData.userEmail}');
+  static Future<List<String>> fetchFriendsOfUser() async {
+    final url = Uri.parse(baseUrl + 'user/friends?email=${UserData.userEmail}');
+
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer ${UserData.authToken}',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final friendsList = List<String>.from(data['friends']);
+        return friendsList;
+      } else {
+        throw Exception('Failed to fetch friend list');
+      }
+    } catch (e) {
+      throw Exception('An error occurred: $e');
+    }
+  }
+
+  //-----GET FRIENDS OF A USER -----
+
+  static Future<List<String>> fetchFriends(String email) async {
+    final url = Uri.parse(baseUrl + 'friends?email=$email');
+
 
 
     try {

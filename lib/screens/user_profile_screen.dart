@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _fetchUserData() async {
     try {
       final userData = await UserAPI.fetchUser();
-      final friendsData = await UserAPI.fetchFriends();
+      final friendsData = await UserAPI.fetchFriendsOfUser();
 
       setState(() {
         _name = userData['name'];
