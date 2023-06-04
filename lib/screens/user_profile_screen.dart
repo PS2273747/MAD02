@@ -3,7 +3,7 @@ import 'package:lastfm_app/api/user_requests.dart';
 import 'package:lastfm_app/api/user_data.dart';
 import 'package:lastfm_app/widgets/bottom_nav.dart';
 import 'package:lastfm_app/api/user_search_result.dart';
-
+import 'package:lastfm_app/api/edit_profile.dart';
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -93,6 +93,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  void _navigateToEditProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfileScreen(name: _name, email: _email),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,6 +152,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(
                   _email,
                   style: TextStyle(fontSize: 24.0, color: Colors.blue),
+                ),
+                SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: _navigateToEditProfile,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: Text('Edit Profile'),
                 ),
               ],
             ),

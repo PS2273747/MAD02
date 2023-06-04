@@ -334,6 +334,30 @@ class UserAPI {
       print('Error occurred: $e');
     }
   }
+//  ------ EDIT PROFILE----
+  static Future<void> editProfile(String name, String email) async {
+    try {
+      final url = Uri.parse(baseUrl + 'user/edit');
+      final response = await http.put(
+        url,
+        headers: {
+          'Authorization': 'Bearer ${UserData.authToken}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'name': name,
+          'email': email,
+        }),
+      );
 
+      if (response.statusCode == 200) {
+        // Profile updated successfully
+      } else {
+        throw Exception('Failed to edit profile: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('An error occurred: $error');
+    }
+  }
 }
 

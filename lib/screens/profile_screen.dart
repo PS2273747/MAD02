@@ -64,13 +64,30 @@ class _ProfilePageState extends State<ProfilePage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => (ProfileScreen())
-        )
+          builder: (context) => ProfileScreen(),
+        ),
       );
     } catch (error) {
       _showErrorDialog('Failed to add friend: $error');
     }
   }
+
+  Future<void> _unFriend() async {
+    try {
+      await FriendRequest.unFriend(widget.email);
+
+      // Refresh the profile
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileScreen(),
+        ),
+      );
+    } catch (error) {
+      _showErrorDialog('Failed to delete friendship: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Email: ${widget.email}',
                     style: TextStyle(fontSize: 20.0, color: Colors.blue),
                   ),
-                  SizedBox(height: 20.0,),
+                  SizedBox(height: 20.0),
                   Text(
                     'Friends:',
                     style: TextStyle(fontSize: 20.0, color: Colors.blue),
@@ -105,16 +122,25 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 200.0,
                     child: SingleChildScrollView(
                       child: Column(
-                        children: friendList.map((friend) => Container(
-                          margin: EdgeInsets.only(bottom: 10.0),
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            friend,
-                            style: TextStyle(fontSize: 18.0, color: Colors.blue),
+                        children: friendList.map(
+                              (friend) => Container(
+                            margin: EdgeInsets.only(bottom: 10.0),
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              friend,
+                              style:
+                              TextStyle(fontSize: 18.0, color: Colors.blue),
+                            ),
                           ),
-                        )).toList(),
+                        ).toList(),
                       ),
                     ),
+                  ),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: _unFriend, // Call the _unFriend method
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                    child: Text('Delete Friend'),
                   ),
                 ],
               )
